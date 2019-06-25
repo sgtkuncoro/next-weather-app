@@ -7,7 +7,6 @@ Desktop.ini
 npm-debug.log
 *.swp
 *.repeaks
-.next
 ./dist
 .env
 
