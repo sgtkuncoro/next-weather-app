@@ -1,13 +1,12 @@
 {
-  "name": "wild-next",
+  "name": "next-weather",
   "version": "0.1.1",
   "description": "Next weather app",
   "main": "server.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": "10.3.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development WILD_ENV=development nodemon --watch middleware --watch server.js server.js",
     "build": "next build",
     "export": "next build && next export -o dist",
