@@ -4,6 +4,8 @@ import Head from "next/head";
 
 import Global from "../components/Global";
 import CurrentWeather from "../components/sections/CurrentWeather";
+import Forecast from "../components/sections/Forecast";
+import DetailedInfo from "../components/sections/DetailInfo";
 
 require("dotenv").config();
 
@@ -162,6 +164,19 @@ export default class Index extends React.Component {
           iconId={this.state.iconId}
           description={this.state.description}
           loading={this.state.loading}
+        />
+        <Forecast
+          forecast={this.state.forecast}
+          tempClass={this.state.temperatureClass}
+        />
+        <DetailedInfo
+          high={this.state.high}
+          low={this.state.low}
+          sunrise={this.state.sunrise}
+          sunset={this.state.sunset}
+          windSpeed={this.state.windSpeed}
+          humidity={this.state.humidity}
+          time={this.state.time}
         />
       </Global>
     );
