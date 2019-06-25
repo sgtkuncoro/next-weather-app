@@ -82,14 +82,14 @@ export default class Index extends React.Component {
   }
 
   /** App city search bar functions  */
-  handleChange(e, val) {
+  handleChange(e) {
     e.preventDefault();
     this.setState({
-      activeCity: val
+      activeCity: e.target.value
     });
   }
 
-  handleSubmit(e, val) {
+  handleSubmit(e) {
     e.preventDefault();
     this.apiRequest(this.state.activeCity);
   }
