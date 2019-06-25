@@ -10,7 +10,7 @@
     "dev": "NODE_ENV=development WILD_ENV=development nodemon --watch middleware --watch server.js server.js",
     "build": "next build",
     "export": "next build && next export -o dist",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node server.js -p $PORT",
     "clean-babel-cache": "rm -Rf ./node_modules/.cache/babel-loader/*",
     "lint": "npm run lint:js",
     "lint:withfix": "npm run lint:js -- --fix",
