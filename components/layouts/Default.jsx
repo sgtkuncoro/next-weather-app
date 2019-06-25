@@ -3,7 +3,6 @@ import Styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "../parts/Header";
-// import Footer from "../parts/Footer";
 
 const DefaultLayout = Styled.div``;
 
@@ -27,13 +26,17 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   return (
-    <div>
-      <Grid container justify="center" alignItems="center">
+    <div className={classes.root}>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={classes.main}
+      >
         <Grid item xs={12} md={8}>
           <DefaultLayout>
             <Header />
             {props.children}
-            {/* <Footer classes={classes.footer} /> */}
           </DefaultLayout>
         </Grid>
       </Grid>

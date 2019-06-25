@@ -3,6 +3,7 @@ import axios from "axios";
 import Head from "next/head";
 
 import Global from "../components/Global";
+import SearchBar from "../components/navigations/SearchBar";
 import CurrentWeather from "../components/sections/CurrentWeather";
 import Forecast from "../components/sections/Forecast";
 import DetailedInfo from "../components/sections/DetailInfo";
@@ -13,15 +14,26 @@ const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 const WEATHER_API_URL = process.env.WEATHER_API_URL;
 
 export default class Index extends React.Component {
-  state = {
-    activeCity: "Jakarta",
-    user: null,
-    forecast: [],
-    temperatureUnits: "metric",
-    temperatureClass: "",
-    savedCities: null,
-    loading: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeCity: "Jakarta",
+      user: null,
+      forecast: [],
+      temperatureUnits: "metric",
+      temperatureClass: "",
+      savedCities: null,
+      loading: false
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.apiRequest = this.apiRequest.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.convertTemperature = this.convertTemperature.bind(this);
+    this.setTemperatureClass = this.setTemperatureClass.bind(this);
+    this.changeUnits = this.changeUnits.bind(this);
+    this.handleAddCity = this.handleAddCity.bind(this);
+    this.handleCityClick = this.handleCityClick.bind(this);
+  }
 
   /** Mount original city  */
   async componentDidMount() {
@@ -70,14 +82,14 @@ export default class Index extends React.Component {
   }
 
   /** App city search bar functions  */
-  handleChange(e) {
+  handleChange(e, val) {
     e.preventDefault();
     this.setState({
-      activeCity: e.target.value
+      activeCity: val
     });
   }
 
-  handleSubmit(e) {
+  handleSubmit(e, val) {
     e.preventDefault();
     this.apiRequest(this.state.activeCity);
   }
@@ -158,6 +170,11 @@ export default class Index extends React.Component {
         <Head>
           <title>Next Weather</title>
         </Head>
+        <SearchBar
+          handleSubmit={this.handleSubmit}
+          handleChange={this.handleChange}
+          activeCity={this.state.activeCity}
+        />
         <CurrentWeather
           city={this.state.cityName}
           temp={this.state.temp}

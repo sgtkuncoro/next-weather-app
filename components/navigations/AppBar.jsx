@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AddIcon from "@material-ui/icons/Add";
 import { Toolbar, Menu, MenuItem, IconButton, Button } from "@material-ui/core";
 
-import { Link } from "../../routes";
+import { Link, Router } from "../../routes";
 
 const ITEM_HEIGHT = 45;
 const URL_LOGO = "/assets/logos/weather-climate-logo.png";
@@ -12,6 +11,10 @@ class ApplicationBar extends Component {
   state = {
     anchorEl: null,
     user: null
+  };
+
+  handleMenuClick = path => {
+    Router.pushRoute(`${path}`);
   };
 
   setUser(user) {
@@ -54,23 +57,11 @@ class ApplicationBar extends Component {
               }
             }}
           >
-            <MenuItem>
-              <Link route={`/`}>
-                <a>Home</a>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link route={`/about`}>
-                <a>About</a>
-              </Link>
-            </MenuItem>
-            <MenuItem>
-              <Link route={`#`}>
-                <a>Profile</a>
-              </Link>
+            <MenuItem onClick={() => this.handleMenuClick("/")}>Home</MenuItem>
+            <MenuItem onClick={() => this.handleMenuClick("/about")}>
+              About
             </MenuItem>
           </Menu>
-          {/* <img src={URL_LOGO} alt="main logo" className="app-bar-logo" /> */}
         </Toolbar>
       </div>
     );
