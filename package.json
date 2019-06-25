@@ -23,7 +23,7 @@
     "**/*.js": "eslint --ignore-path .eslintignore",
     "**/*.scss": "stylelint */**.scss --fix"
   },
-  "author": "WILD <weare@wild.as> (https://wild.as)",
+  "author": "S. Kuncoro <sigit.kunc@gmail.com>",
   "license": "ISC",
   "eslintConfig": {
     "extends": "wild"
