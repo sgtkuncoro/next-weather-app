@@ -3,7 +3,6 @@ const next = require("next");
 const routes = require("./routes");
 const app = next({ dev: process.env.APP_ENV !== "production" });
 const handler = routes.getRequestHandler(app);
-const address = require("address");
 
 app.prepare().then(() => {
   const server = express();
@@ -26,7 +25,5 @@ app.prepare().then(() => {
     console.log(
       `> Env ${process.env.APP_ENV} Ready on http://localhost:${port}`
     ); // eslint-disable-line no-console
-
-    const url = `http://${address.ip()}:${port}`;
   });
 });
