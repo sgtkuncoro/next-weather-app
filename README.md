@@ -2,6 +2,14 @@
 
 The city weather application
 
+Use the deployed version at: https://next-weather.herokuapp.com.
+
+![Imgur](https://imgur.com/a/2n7UVVg)
+
+## App Details
+
+Next city weather web application using nextjs, axios, next-router and Yahoo Weather API.
+
 ## Installation
 
 ```bash
