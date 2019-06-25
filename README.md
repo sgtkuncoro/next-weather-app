@@ -4,7 +4,7 @@ The city weather application
 
 Use the deployed version at: https://next-weather.herokuapp.com.
 
-![Imgur](https://imgur.com/a/2n7UVVg)
+![Imgur](https://i.imgur.com/Zg8kgVR.png)
 
 ## App Details
 
