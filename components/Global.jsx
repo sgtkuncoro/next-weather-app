@@ -1,9 +1,10 @@
 import React from "react";
-import styles from "./Global.scss";
+
+import GlobalLayout from "../components/layouts/Global";
+import DefaultLayout from "../components/layouts/Default";
 
 export default props => (
-  <div>
-    {props.children}
-    <style jsx global>{styles}</style>
-  </div>
+  <GlobalLayout>
+    <DefaultLayout>{props.children}</DefaultLayout>
+  </GlobalLayout>
 );

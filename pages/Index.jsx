@@ -1,69 +1,168 @@
 import React from "react";
+import axios from "axios";
 import Head from "next/head";
-import Link from "next/link";
 
 import Global from "../components/Global";
-import styles from "./Index.scss";
+import CurrentWeather from "../components/sections/CurrentWeather";
+
+require("dotenv").config();
+
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+const WEATHER_API_URL = process.env.WEATHER_API_URL;
 
 export default class Index extends React.Component {
+  state = {
+    activeCity: "Jakarta",
+    user: null,
+    forecast: [],
+    temperatureUnits: "metric",
+    temperatureClass: "",
+    savedCities: null,
+    loading: false
+  };
+
+  /** Mount original city  */
+  async componentDidMount() {
+    await this.apiRequest(this.state.activeCity);
+  }
+
+  /** Yahoo! Weather API request  */
+  async apiRequest(cityName) {
+    this.setState({ loading: true });
+    const locationUrl = `${WEATHER_API_URL}/weather?q=${cityName}&units=${
+      this.state.temperatureUnits
+    }&appid=${WEATHER_API_KEY}`;
+
+    await axios
+      .get(locationUrl)
+      .then(result => {
+        const currentConditions = result.data;
+        this.setState({
+          cityName: currentConditions.name,
+          temp: currentConditions.main.temp,
+          iconId: currentConditions.weather[0].id,
+          description: currentConditions.weather[0].main,
+          humidity: currentConditions.main.humidity,
+          time: currentConditions.dt,
+          high: currentConditions.main.temp_max,
+          low: currentConditions.main.temp_min,
+          sunrise: currentConditions.sys.sunrise,
+          sunset: currentConditions.sys.sunset,
+          windSpeed: `${currentConditions.wind.speed} ${
+            this.state.temperatureUnits === "metric" ? "m/s" : "mph"
+          }`
+        });
+        this.setTemperatureClass();
+      })
+      .catch(err => {
+        this.setState({ loading: false });
+        console.log(err);
+      });
+    const forecastUrl = `${WEATHER_API_URL}/forecast?q=${cityName}&units=${
+      this.state.temperatureUnits
+    }&appid=${WEATHER_API_KEY}`;
+
+    axios.get(forecastUrl).then(result => {
+      this.setState({ forecast: result.data.list, loading: false });
+    });
+  }
+
+  /** App city search bar functions  */
+  handleChange(e) {
+    e.preventDefault();
+    this.setState({
+      activeCity: e.target.value
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.apiRequest(this.state.activeCity);
+  }
+
+  /** Set temperature class for color combos  */
+  convertTemperature() {
+    if (this.state.temperatureUnits === "metric") {
+      return (this.state.temp * 9) / 5 + 32;
+    } else {
+      return this.state.temp;
+    }
+  }
+
+  setTemperatureClass() {
+    let temp = this.convertTemperature();
+    if (temp >= 100) {
+      this.setState({
+        temperatureClass: "boiling"
+      });
+    }
+    if (temp < 100 && temp >= 85) {
+      this.setState({
+        temperatureClass: "hot"
+      });
+    }
+    if (temp < 85 && temp >= 65) {
+      this.setState({
+        temperatureClass: "warm"
+      });
+    }
+    if (temp < 65 && temp >= 50) {
+      this.setState({
+        temperatureClass: "perfect"
+      });
+    }
+    if (temp < 50 && temp >= 32) {
+      this.setState({
+        temperatureClass: "cool"
+      });
+    }
+    if (temp < 32) {
+      this.setState({
+        temperatureClass: "freezing"
+      });
+    }
+  }
+
+  /** Toggle Celsius and Fahrenheit */
+  changeUnits() {
+    setTimeout(() => {
+      this.state.temperatureUnits === "imperial"
+        ? this.setState({ temperatureUnits: "metric" })
+        : this.setState({ temperatureUnits: "imperial" });
+      this.apiRequest(this.state.activeCity);
+    });
+  }
+
+  /** Add city to database */
+  handleAddCity(e) {
+    e.preventDefault();
+    if (this.state.user != null) {
+      this.citiesRef.push({
+        city: this.state.activeCity,
+        user: this.state.user.email
+      });
+    }
+    this.handleSavedCities();
+  }
+
+  handleCityClick(city) {
+    this.setState({ activeCity: city });
+    this.apiSearch(city);
+  }
+
   render() {
     return (
       <Global>
         <Head>
-          <title>Home</title>
+          <title>Next Weather</title>
         </Head>
-        <div className="index-wrapper">
-          <h1 className="headline">Welcome to wild-next </h1>
-          <Link href="/about">
-            <a>About</a>
-          </Link>
-          <ul>
-            <li>
-              <pre>./components</pre> Holds all components (repeating sections /
-              widgets) that are used by pages to composite pages.
-            </li>
-            <li>
-              <pre>./pages</pre> Holds all pages (containers), each file should
-              represent one route. They are automatically routed by their
-              filename, but can have a custom route name (see readme).
-              <ul>
-                <li>
-                  <pre>./pages/_app.js</pre> Next.js component that is wrapped
-                  around every page and doesn’t re-render when a route changes.
-                  Practical for holding global state that should not be reset on
-                  page change, or things like background sounds.
-                </li>
-                <li>
-                  <pre>./pages/_document.js</pre> The underlying html for every
-                  page render. This is only rendered once on the server and
-                  serves as the container for the react app from then on.
-                </li>
-                <li>
-                  <pre>./pages/_errors.js</pre> 404 or 500 errors from both
-                  client- and server side are handled by this component. We
-                  again have a sane default here, which frankly can be
-                  customized as needed.
-                </li>
-              </ul>
-            </li>
-            <li>
-              <pre>./services</pre> Every piece of JavaScript that does not
-              export a Component should be housed here. Classic candidates are
-              Singletons that encapsulate functionality like SDKs.
-            </li>
-            <li>
-              <pre>./middleware</pre> Express middlewares that extend backend
-              functionality. For example custom APIs or endpoints for form
-              processing
-            </li>
-            <li>
-              <pre>./static</pre> Holds all static files (fonts / images /
-              videos etc.), can also be used to transfer things like robots.txt
-              or favicon.ico
-            </li>
-          </ul>
-        </div>
-        <style jsx>{styles}</style>
+        <CurrentWeather
+          city={this.state.cityName}
+          temp={this.state.temp}
+          iconId={this.state.iconId}
+          description={this.state.description}
+          loading={this.state.loading}
+        />
       </Global>
     );
   }

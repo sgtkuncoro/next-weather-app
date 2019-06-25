@@ -4,10 +4,11 @@ const routes = require("./routes");
 const app = next({ dev: process.env.NODE_ENV !== "production" });
 const handler = routes.getRequestHandler(app);
 const address = require("address");
-const qrcode = require("qrcode-terminal");
 
 app.prepare().then(() => {
   const server = express();
+
+  server.use("/assets", express.static(`${__dirname}/static`));
 
   // here you could do some express stuff if you fancy, eg. running custom middleware or offering an API
   // server.get('/api', (req, res) => {
@@ -26,6 +27,5 @@ app.prepare().then(() => {
     ); // eslint-disable-line no-console
 
     const url = `http://${address.ip()}:${port}`;
-    qrcode.generate(url, { small: true });
   });
 });
