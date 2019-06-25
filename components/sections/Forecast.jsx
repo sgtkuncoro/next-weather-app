@@ -6,7 +6,11 @@ const Forecast = ({ forecast, tempClass }) => (
   <div className={`forecast`}>
     <div className="horiz-menu">
       <Toolbar>
-        <Tabs scrollable scrollButtons="auto" className="forecast-area">
+        <Tabs
+          scrollButtons="auto"
+          className="forecast-area"
+          variant="scrollable"
+        >
           {forecast.map((day, index) => {
             let dayNight = "";
             if (
